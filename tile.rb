@@ -6,6 +6,7 @@ class Tile
   end
 
   def inspect
+    "#<Tile:#{object_id} @value=#{@value}, @flag=#{@flag}"
   end
 
   def reveal
