@@ -1,8 +1,9 @@
 class Tile
-  def initialize(value, board, flagged=false)
+  def initialize(value, board, revealed, flagged=false)
     @value = value
     @board = board
     @flag = flagged
+    @revealed = revealed
   end
 
   def inspect
@@ -10,6 +11,7 @@ class Tile
   end
 
   def reveal
+
   end
 
   def neighbours
