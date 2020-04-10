@@ -37,10 +37,12 @@ class Board
     nil
   end
 
-  def reveal
+  def reveal(pos)
+    self[pos].reveal
   end
 
   def flag
+    self[pos].flag
   end
 
   def won?
