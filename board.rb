@@ -46,5 +46,8 @@ class Board
   end
 
   def won?
+    @grid.all? do |row|
+      row.all? { |tile| tile.revealed? && tile.safe? }
+    end
   end
 end
