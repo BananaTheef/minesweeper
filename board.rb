@@ -1,5 +1,5 @@
 class Board
-  def initialize(n=9, bombs_count)
+  def initialize(n=9, bombs_count=10)
     @grid = Array.new(n) { Array.new(n) }
     @bombs_count = bombs_count
   end
