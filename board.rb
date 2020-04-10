@@ -1,6 +1,6 @@
 class Board
   def initialize(n=9, bombs_count=10)
-    @grid = Array.new(n) { Array.new(n, "_") }
+    @grid = Array.new(n) { Array.new(n, "|_|") }
     @bombs_count = bombs_count
   end
 
@@ -30,7 +30,7 @@ class Board
   end
 
   def render
-    puts "  #{(0...self.size).to_a.join(' ')}"
+    puts "   #{(0...self.size).to_a.join('   ')}"
     @grid.each_with_index do |row, i|
       puts "#{i} #{row.join(' ')}"
     end
