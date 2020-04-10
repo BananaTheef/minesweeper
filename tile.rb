@@ -1,5 +1,8 @@
 class Tile
-  def initialize
+  def initialize(value, board, flagged=false)
+    @value = value
+    @board = board
+    @flag = flagged
   end
 
   def inspect
