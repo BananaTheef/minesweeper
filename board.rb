@@ -1,5 +1,6 @@
 class Board
   def initialize(n=9)
+    @grid = Array.new(n) { Array.new(n) }
   end
 
   def place_bombs
