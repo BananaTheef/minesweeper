@@ -1,7 +1,9 @@
 class Tile
   attr_accessor :value
 
-  def initialize(value="_", revealed=false, flagged=false)
+  def initialize(board, pos, value=" _ ", revealed=false, flagged=false)
+    @board = board
+    @pos = pos
     @value = value
     @flagged = flagged
     @revealed = revealed
@@ -11,7 +13,7 @@ class Tile
     if self.revealed?
       self.value
     elsif self.flagged?
-      "F"
+      "|F|"
     else
       "|_|"
     end
