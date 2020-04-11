@@ -33,8 +33,8 @@ class Board
     count = 0
     until count == @bombs_count
       pos = [rand(self.size), rand(self.size)]
-      if self[pos].value == "_"
-        self[pos].value = "*"
+      if self[pos].value == " _ "
+        self[pos].value = " * "
         count += 1
       end
     end
