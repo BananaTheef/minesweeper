@@ -1,7 +1,6 @@
-class Tile
-  BOMB = " B "
-  FREE = " _ "
+require_relative 'constants.rb'
 
+class Tile
   attr_accessor :value
 
   def initialize(pos, board=[], revealed=false, flagged=false)

@@ -1,9 +1,7 @@
+require_relative 'constants.rb'
 require_relative 'tile.rb'
 
 class Board
-  BOMB = " B "
-  FREE = " _ "
-
   def initialize(n=9, bombs_count=10)
     @grid = Array.new(n) { Array.new(n) }
     @bombs_count = bombs_count
@@ -38,8 +36,7 @@ class Board
     (0...self.size).each do |row|
       (0...self.size).each do |col|
         pos = row, col
-        next if self[pos].value == BOMB
-        self[pos] = Tile.new(pos, FREE, @grid)
+        self[pos] = Tile.new(pos, FREE, @grid) if self[pos].nil?
       end
     end
   end
