@@ -1,7 +1,7 @@
 class Tile
   attr_accessor :value
 
-  def initialize(value, revealed=false, flagged=false)
+  def initialize(value="_", revealed=false, flagged=false)
     @value = value
     @flagged = flagged
     @revealed = revealed
