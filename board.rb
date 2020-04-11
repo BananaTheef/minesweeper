@@ -1,6 +1,9 @@
 require_relative 'tile.rb'
 
 class Board
+  BOMB = " B "
+  FREE = " _ "
+
   def initialize(n=9, bombs_count=10)
     @grid = Array.new(n) { Array.new(n) }
     @bombs_count = bombs_count
@@ -20,22 +23,23 @@ class Board
     @grid.length
   end
 
-  def populate
-    (0...self.size).each do |row|
-      (0...self.size).each do |col|
-        pos = row, col
-        self[pos] = Tile.new(@grid, pos)
-      end
-    end
-  end
-
   def place_bombs
     count = 0
     until count == @bombs_count
       pos = [rand(self.size), rand(self.size)]
-      if self[pos].value == " _ "
-        self[pos].value = " * "
+      if self[pos].nil?
+        self[pos] = Tile.new(pos, BOMB)
         count += 1
+      end
+    end
+  end
+
+  def populate
+    (0...self.size).each do |row|
+      (0...self.size).each do |col|
+        pos = row, col
+        next if self[pos].value == BOMB
+        self[pos] = Tile.new(pos, FREE, @grid)
       end
     end
   end
