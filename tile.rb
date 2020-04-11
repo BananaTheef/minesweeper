@@ -1,9 +1,8 @@
 class Tile
   attr_accessor :value
 
-  def initialize(value, board, revealed=false, flagged=false)
+  def initialize(value, revealed=false, flagged=false)
     @value = value
-    @board = board
     @flagged = flagged
     @revealed = revealed
   end
@@ -17,14 +16,18 @@ class Tile
   end
 
   def bombed?
+    self.value == "*" ? true : false
   end
 
   def flagged?
+    self.value == "F" ? true : false
   end
 
   def revealed?
+    self.value == "_" ? true : false
   end
 
   def safe?
+    self.value == "|_|" ? true : false
   end
 end
