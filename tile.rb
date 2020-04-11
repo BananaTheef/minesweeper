@@ -8,11 +8,21 @@ class Tile
   end
 
   def to_s
-    @revealed ? self.value.to_s : "|_|"
+    if self.revealed?
+      self.value
+    elsif self.flagged?
+      "F"
+    else
+      "|_|"
+    end
   end
 
   def reveal
-    @revealed = true
+    @revealed = !@revealed
+  end
+
+  def flag
+    @flagged = !@flagged
   end
 
   def bombed?
@@ -20,7 +30,7 @@ class Tile
   end
 
   def flagged?
-    self.value == "F" ? true : false
+    @flagged
   end
 
   def revealed?
@@ -28,6 +38,6 @@ class Tile
   end
 
   def safe?
-    self.value == "|_|" ? true : false
+    self.value == "_" ? true : false
   end
 end
