@@ -11,6 +11,10 @@ class Tile
     "#<Tile:#{object_id} @value=#{@value}, @flag=#{@flag}, @revealed=#{@revealed}>"
   end
 
+  def to_s
+    @revealed ? self.value.to_s : "|_|"
+  end
+
   def reveal
     @revealed = true
   end
@@ -24,7 +28,7 @@ class Tile
   end
 
   def revealed?
-    self.value == "_" ? true : false
+    @revealed
   end
 
   def safe?
