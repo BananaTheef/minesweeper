@@ -1,6 +1,8 @@
+require_relative 'tile.rb'
+
 class Board
   def initialize(n=9, bombs_count=10)
-    @grid = Array.new(n) { Array.new(n, "|_|") }
+    @grid = Array.new(n) { Array.new(n) { Tile.new("|_|") } }
     @bombs_count = bombs_count
   end
 
@@ -18,8 +20,8 @@ class Board
     count = 0
     until count == @bombs_count
       pos = [rand(self.size), rand(self.size)]
-      if self[pos] == "_"
-        self[pos] = "*"
+      if self[pos].value == "_"
+        self[pos].value = "*"
         count += 1
       end
     end
