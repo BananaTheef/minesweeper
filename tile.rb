@@ -1,7 +1,10 @@
 class Tile
+  BOMB = " B "
+  FREE = " _ "
+
   attr_accessor :value
 
-  def initialize(board, pos, value=" _ ", revealed=false, flagged=false)
+  def initialize(pos, board=[], revealed=false, flagged=false)
     @board = board
     @pos = pos
     @value = value
@@ -9,13 +12,18 @@ class Tile
     @revealed = revealed
   end
 
+  def [](pos)
+    row, col = pos
+    @board[row][col]
+  end
+
   def to_s
     if self.revealed?
       self.value
     elsif self.flagged?
-      "|F|"
+      " F "
     else
-      "|_|"
+      " * "
     end
   end
 
@@ -32,6 +40,10 @@ class Tile
       .select { |pos| pos.none? { |i| i < 0 } }
   end
 
+  def neighbours_bomb_count
+    self.neighbours.count { |pos| self[pos].value == BOMB }
+  end
+
   def reveal
     @revealed = !@revealed
   end
@@ -41,7 +53,7 @@ class Tile
   end
 
   def bombed?
-    self.value == "*" ? true : false
+    self.value == BOMB ? true : false
   end
 
   def flagged?
@@ -53,6 +65,6 @@ class Tile
   end
 
   def safe?
-    self.value == "_" ? true : false
+    self.value == FREE ? true : false
   end
 end
