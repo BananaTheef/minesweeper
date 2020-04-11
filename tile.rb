@@ -19,6 +19,19 @@ class Tile
     end
   end
 
+  def neighbours
+    top = [@pos.first - 1, @pos.last]
+    top_right = [@pos.first - 1, @pos.last + 1]
+    right = [@pos.first, @pos.last + 1]
+    bottom_right = [@pos.first + 1, @pos.last + 1]
+    bottom = [@pos.first + 1, @pos.last]
+    bottom_left = [@pos.first + 1, @pos.last - 1]
+    left = [@pos.first, @pos.last - 1]
+    top_left = [@pos.first - 1, @pos.last - 1]
+    [top, top_right, right, bottom_right, bottom, bottom_left, left, top_left]
+      .select { |pos| pos.none? { |i| i < 0 } }
+  end
+
   def reveal
     @revealed = !@revealed
   end
