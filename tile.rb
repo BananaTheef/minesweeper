@@ -3,7 +3,7 @@ require_relative 'constants.rb'
 class Tile
   attr_accessor :value
 
-  def initialize(pos, board=[], revealed=false, flagged=false)
+  def initialize(pos, value, board=[], revealed=false, flagged=false)
     @board = board
     @pos = pos
     @value = value
