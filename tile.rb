@@ -2,7 +2,7 @@ class Tile
   def initialize(value, board, revealed=false, flagged=false)
     @value = value
     @board = board
-    @flag = flagged
+    @flagged = flagged
     @revealed = revealed
   end
 
