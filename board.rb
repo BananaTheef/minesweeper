@@ -2,7 +2,7 @@ require_relative 'tile.rb'
 
 class Board
   def initialize(n=9, bombs_count=10)
-    @grid = Array.new(n) { Array.new(n) { Tile.new("|_|") } }
+    @grid = Array.new(n) { Array.new(n) }
     @bombs_count = bombs_count
   end
 
@@ -16,6 +16,19 @@ class Board
     @grid[row][col] = val
   end
 
+  def size
+    @grid.length
+  end
+
+  def populate
+    (0...self.size).each do |row|
+      (0...self.size).each do |col|
+        pos = row, col
+        self[pos] = Tile.new(@grid, pos)
+      end
+    end
+  end
+
   def place_bombs
     count = 0
     until count == @bombs_count
@@ -25,10 +38,6 @@ class Board
         count += 1
       end
     end
-  end
-
-  def size
-    @grid.length
   end
 
   def render
@@ -43,7 +52,7 @@ class Board
     self[pos].reveal
   end
 
-  def flag
+  def flag(pos)
     self[pos].flag
   end
 
