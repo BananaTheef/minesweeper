@@ -1,4 +1,6 @@
 class Tile
+  attr_accessor :value
+
   def initialize(value, board, revealed=false, flagged=false)
     @value = value
     @board = board
@@ -12,12 +14,6 @@ class Tile
 
   def reveal
     @revealed = true
-  end
-
-  def neighbours
-  end
-
-  def neighbour_bomb_count
   end
 
   def bombed?
