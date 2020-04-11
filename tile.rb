@@ -7,10 +7,6 @@ class Tile
     @revealed = revealed
   end
 
-  def inspect
-    "#<Tile:#{object_id} @value=#{@value}, @flag=#{@flag}, @revealed=#{@revealed}>"
-  end
-
   def to_s
     @revealed ? self.value.to_s : "|_|"
   end
