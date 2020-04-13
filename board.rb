@@ -5,6 +5,9 @@ class Board
   def initialize(n=9, bombs_count=10)
     @grid = Array.new(n) { Array.new(n) }
     @bombs_count = bombs_count
+    @size = self.size
+    self.place_bombs
+    self.populate
   end
 
   def [](pos)
