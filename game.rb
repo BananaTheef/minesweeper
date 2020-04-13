@@ -1,6 +1,8 @@
 require_relative 'board.rb'
 
 class Game
+  attr_reader :board
+
   def initialize(n=9, bombs_count=10)
     @board = Board.new(n, bombs_count)
     @board_size = n
@@ -53,7 +55,7 @@ class Game
       @board.render
       pos = self.get_pos
       action = self.get_action
-      action == "r" : self.reveal(pos) : self.flag(pos)
+      action == "r" ? self.reveal(pos) : self.flag(pos)
     end
     puts "Congratulation, you won!"
   end
