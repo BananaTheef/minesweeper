@@ -3,12 +3,13 @@ require_relative 'constants.rb'
 class Tile
   attr_accessor :value
 
-  def initialize(pos, value, board=[], revealed=false, flagged=false)
+  def initialize(pos, value, board=[])
     @board = board
     @pos = pos
     @value = value
-    @flagged = flagged
-    @revealed = revealed
+    @flagged = false
+    @revealed = false
+    @fringed = false
   end
 
   def [](pos)
@@ -45,10 +46,12 @@ class Tile
     self.neighbours.count { |pos| self[pos].value == BOMB }
   end
 
-  def fringe?
-    self.neighbours.all? do |pos|
-      self[pos].revealed? || self[pos].bombed?
-    end
+  def any_neighbours_bomb?
+    self.neighbours_bomb_count != 0
+  end
+
+  def fringe
+    @fringed = !@fringed
   end
 
   def reveal
