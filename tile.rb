@@ -47,7 +47,7 @@ class Tile
 
   def fringe?
     self.neighbours.all? do |pos|
-      self[pos].revealed? || self[pos].bombed? }
+      self[pos].revealed? || self[pos].bombed?
     end
   end
 
