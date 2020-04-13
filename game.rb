@@ -1,5 +1,6 @@
 class Game
   def initialize
+    @board = Board.new(n, bombs_count)
   end
 
   def get_pos
