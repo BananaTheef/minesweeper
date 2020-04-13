@@ -31,21 +31,34 @@ class Game
     pos
   end
 
+  def get_action
+    puts "Do you want to (r)eaveal or (f)lag the position?"
+    gets.chomp
+  end
+
   def parse_int(string)
     string.split(",").map { |c| Integer(c) }
   end
 
-  def reveal
-    @board.reveal
+  def reveal(pos)
+    @board.reveal(pos)
   end
 
-  def flag
-    @board.flag
+  def flag(pos)
+    @board.flag(pos)
   end
 
   def run
+    until self.game_over?
+      @board.render
+      pos = self.get_pos
+      action = self.get_action
+      action == "r" : self.reveal(pos) : self.flag(pos)
+    end
+    puts "Congratulation, you won!"
   end
 
   def game_over?
+    @board.won?
   end
 end
