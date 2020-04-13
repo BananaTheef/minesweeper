@@ -36,9 +36,11 @@ class Game
   end
 
   def reveal
+    @board.reveal
   end
 
   def flag
+    @board.flag
   end
 
   def run
