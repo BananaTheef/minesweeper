@@ -40,7 +40,7 @@ class Tile
     left = [@pos.first, @pos.last - 1]
     top_left = [@pos.first - 1, @pos.last - 1]
     [top, top_right, right, bottom_right, bottom, bottom_left, left, top_left]
-      .select { |pos| pos.none? { |i| (0..8).include?(i) } }
+      .select { |pos| pos.all? { |i| (0..8).include?(i) } }
   end
 
   def neighbours_bomb_count
