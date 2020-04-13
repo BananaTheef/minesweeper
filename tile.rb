@@ -21,6 +21,8 @@ class Tile
       self.value
     elsif self.flagged?
       " F "
+    elsif self.fringe?
+      " #{self.neighbours_bomb_count} "
     else
       " * "
     end
