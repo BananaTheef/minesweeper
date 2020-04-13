@@ -65,4 +65,10 @@ class Board
       row.all? { |tile| tile.revealed? && tile.safe? }
     end
   end
+
+  def cheat
+    @grid.each do |row|
+      row.each { |tile| tile.reveal }
+    end
+  end
 end
