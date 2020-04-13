@@ -43,6 +43,12 @@ class Tile
     self.neighbours.count { |pos| self[pos].value == BOMB }
   end
 
+  def fringe?
+    self.neighbours.all? do |pos|
+      self[pos].revealed? || self[pos].bombed? }
+    end
+  end
+
   def reveal
     @revealed = !@revealed
   end
