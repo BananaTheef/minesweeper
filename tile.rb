@@ -1,3 +1,4 @@
+require 'byebug'
 require_relative 'constants.rb'
 
 class Tile
@@ -22,7 +23,7 @@ class Tile
       self.value
     elsif self.flagged?
       " F "
-    elsif self.fringe?
+    elsif self.fringed?
       " #{self.neighbours_bomb_count} "
     else
       " * "
@@ -39,11 +40,15 @@ class Tile
     left = [@pos.first, @pos.last - 1]
     top_left = [@pos.first - 1, @pos.last - 1]
     [top, top_right, right, bottom_right, bottom, bottom_left, left, top_left]
-      .select { |pos| pos.none? { |i| i < 0 } }
+      .select { |pos| pos.none? { |i| (0..8).include?(i) } }
   end
 
   def neighbours_bomb_count
+    # begin
     self.neighbours.count { |pos| self[pos].value == BOMB }
+    # rescue
+    #   debugger
+    # end
   end
 
   def any_neighbours_bomb?
@@ -54,24 +59,29 @@ class Tile
     @fringed = !@fringed
   end
 
+  def fringed?
+    @fringed
+  end
+
   def reveal
     @revealed = !@revealed
   end
 
-  def flag
-    @flagged = !@flagged
+  def revealed?
+    @revealed
   end
 
-  def bombed?
-    self.value == BOMB ? true : false
+
+  def flag
+    @flagged = !@flagged
   end
 
   def flagged?
     @flagged
   end
 
-  def revealed?
-    @revealed
+  def bombed?
+    self.value == BOMB ? true : false
   end
 
   def safe?
