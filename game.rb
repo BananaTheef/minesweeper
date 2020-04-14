@@ -5,7 +5,6 @@ class Game
 
   def initialize(n=9, bombs_count=10)
     @board = Board.new(n, bombs_count)
-    @board_size = n
   end
 
   def valid_pos?(pos)
@@ -42,12 +41,24 @@ class Game
     string.split(",").map { |c| Integer(c) }
   end
 
-  def reveal(pos)
-    @board.reveal(pos)
+  def scout(pos)
+    @board[pos].scout
   end
 
   def flag(pos)
-    @board.flag(pos)
+    @board[pos].flag
+  end
+
+  def won
+    puts "Congratulation, you won!"
+  end
+
+  def lost
+    puts "You lost!"
+  end
+
+  def game_over?
+    @board.won? || @board.lost?
   end
 
   def run
@@ -55,12 +66,9 @@ class Game
       @board.render
       pos = self.get_pos
       action = self.get_action
-      action == "r" ? self.reveal(pos) : self.flag(pos)
+      action == "r" ? self.scout(pos) : self.flag(pos)
     end
-    puts "Congratulation, you won!"
-  end
-
-  def game_over?
-    @board.won?
+    @board.won? ? self.won : self.lost
+    @board.reveal
   end
 end
