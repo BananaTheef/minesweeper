@@ -1,12 +1,11 @@
-require_relative 'constants.rb'
 require_relative 'tile.rb'
 
 class Board
-  def initialize(n=9, bombs_count=10)
-    @grid = Array.new(n) { Array.new(n) }
+  attr_reader :grid_size, :bombs_count
+
+  def initialize(grid_size=9, bombs_count=10)
+    @grid_size = grid_size
     @bombs_count = bombs_count
-    @size = self.size
-    self.place_bombs
     self.populate
   end
 
@@ -15,60 +14,46 @@ class Board
     @grid[row][col]
   end
 
-  def []=(pos, val)
-    row, col = pos
-    @grid[row][col] = val
-  end
-
-  def size
-    @grid.length
-  end
-
-  def place_bombs
-    count = 0
-    until count == @bombs_count
-      pos = [rand(self.size), rand(self.size)]
-      if self[pos].nil?
-        self[pos] = Tile.new(pos, BOMB)
-        count += 1
-      end
-    end
-  end
-
-  def populate
-    (0...self.size).each do |row|
-      (0...self.size).each do |col|
-        pos = row, col
-        self[pos] = Tile.new(pos, FREE, @grid) if self[pos].nil?
-      end
-    end
-  end
 
   def render
-    puts "   #{(0...self.size).to_a.join('  ')}"
+    puts "   #{(0...@grid_size).to_a.join('  ')}"
     @grid.each_with_index do |row, i|
       puts "#{i} #{row.join('')}"
     end
     nil
   end
 
-  def reveal(pos)
-    self[pos].reveal
-  end
-
-  def flag(pos)
-    self[pos].flag
-  end
-
-  def won?
-    @grid.all? do |row|
-      row.all? { |tile| tile.revealed? && tile.safe? }
-    end
-  end
-
-  def cheat
+  def reveal
     @grid.each do |row|
       row.each { |tile| tile.reveal }
     end
+    self.render
+  end
+
+  def place_bombs
+    count = 0
+    until count == @bombs_count
+      pos = [rand(@grid_size), rand(@grid_size)]
+      tile = self[pos]
+      unless tile.bombed?
+        tile.bomb
+        count += 1
+      end
+    end
+  end
+
+  def populate
+    @grid = Array.new(grid_size) do |row|
+      Array.new(grid_size) { |col| Tile.new(self, [row, col]) }
+    end
+    self.place_bombs
+  end
+
+  def lost?
+    @grid.flatten.any? { |tile| tile.bombed? && tile.revealed? }
+  end
+
+  def won?
+    @grid.flatten.all? { |tile| tile.bombed? != tile.revealed? }
   end
 end
