@@ -1,44 +1,35 @@
-require 'byebug'
-require_relative 'constants.rb'
-
 class Tile
-  attr_accessor :value
+  attr_accessor :pos
 
-  def initialize(pos, value, board=[])
+  def initialize(board, pos)
     @board = board
+    @board_size = @board.grid_size-1
     @pos = pos
-    @value = value
     @flagged = false
     @revealed = false
-    @fringed = false
+    @bombed = false
   end
 
   def inspect
     { 'pos' => @pos,
-      'value' => @value,
-      'flagged' => @flagged,
-      'revealed' => @revealed,
-      'fringed' => @fringed }.inspect
-  end
-
-  def [](pos)
-    row, col = pos
-    @board[row][col]
+      'flagged' => self.flagged?,
+      'revealed' => self.revealed?,
+      'fringed' => self.fringed? }.inspect
   end
 
   def to_s
-    if self.revealed?
-      self.value
-    elsif self.flagged?
+    if self.flagged?
       " F "
-    elsif self.fringed? && self.revealed?
-      " #{self.neighbours_bomb_count} "
+    elsif self.bombed? && self.revealed?
+      " B "
+    elsif self.revealed?
+      self.any_neighbors_bomb? ? " #{self.neighbors_bomb_count} " : " _ "
     else
       " * "
     end
   end
 
-  def neighbours
+  def neighbors
     top = [@pos.first - 1, @pos.last]
     top_right = [@pos.first - 1, @pos.last + 1]
     right = [@pos.first, @pos.last + 1]
@@ -48,27 +39,30 @@ class Tile
     left = [@pos.first, @pos.last - 1]
     top_left = [@pos.first - 1, @pos.last - 1]
     [top, top_right, right, bottom_right, bottom, bottom_left, left, top_left]
-      .select { |pos| pos.all? { |i| (0..8).include?(i) } }
+      .select { |pos| pos.all? { |i| (0..@board_size).include?(i) } }
+      .map { |pos| @board[pos] }
   end
 
-  def neighbours_bomb_count
-    self.neighbours.count { |pos| self[pos].value == BOMB }
+  def neighbors_bomb_count
+    self.neighbors.count { |tile| tile.bombed? }
   end
 
-  def any_neighbours_bomb?
-    self.neighbours_bomb_count != 0
+  def scout
+    return self if self.revealed?
+    return self if self.flagged?
+    self.reveal
+    if !self.bombed? && !self.any_neighbors_bomb?
+      self.neighbors.each { |tile| tile.scout }
+    end
+    self
   end
 
-  def fringe
-    @fringed = self.neighbours_bomb_count != 0 ? true : false
-  end
-
-  def fringed?
-    @fringed
+  def any_neighbors_bomb?
+    self.neighbors_bomb_count != 0
   end
 
   def reveal
-    @revealed = !@revealed
+    @revealed = true
   end
 
   def revealed?
@@ -77,18 +71,18 @@ class Tile
 
 
   def flag
-    @flagged = !@flagged
+    @flagged = !@flagged unless @revealed
   end
 
   def flagged?
     @flagged
   end
 
-  def bombed?
-    self.value == BOMB ? true : false
+  def bomb
+    @bombed = true
   end
 
-  def safe?
-    self.value == FREE ? true : false
+  def bombed?
+    @bombed
   end
 end
