@@ -31,7 +31,7 @@ class Tile
       self.value
     elsif self.flagged?
       " F "
-    elsif self.fringed?
+    elsif self.fringed? && self.revealed?
       " #{self.neighbours_bomb_count} "
     else
       " * "
@@ -52,11 +52,7 @@ class Tile
   end
 
   def neighbours_bomb_count
-    # begin
     self.neighbours.count { |pos| self[pos].value == BOMB }
-    # rescue
-    #   debugger
-    # end
   end
 
   def any_neighbours_bomb?
@@ -64,7 +60,7 @@ class Tile
   end
 
   def fringe
-    @fringed = !@fringed
+    @fringed = self.neighbours_bomb_count != 0 ? true : false
   end
 
   def fringed?
