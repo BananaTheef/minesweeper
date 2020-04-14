@@ -13,6 +13,14 @@ class Tile
     @fringed = false
   end
 
+  def inspect
+    { 'pos' => @pos,
+      'value' => @value,
+      'flagged' => @flagged,
+      'revealed' => @revealed,
+      'fringed' => @fringed }.inspect
+  end
+
   def [](pos)
     row, col = pos
     @board[row][col]
