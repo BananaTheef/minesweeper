@@ -23,7 +23,7 @@ class Tile
     if self.flagged?
       " F "
     elsif self.bombed? && self.revealed?
-      " B ".colorize(:black)
+      " B ".colorize(:magenta)
     elsif self.revealed?
       self.any_neighbors_bomb? ? self.bomb_count_colorized : " _ "
     else
