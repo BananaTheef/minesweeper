@@ -99,7 +99,7 @@ class Game
     end
   end
 
-  def start
+  def best_wishes
     puts "Enjoy the game and good luck."
   end
 
@@ -116,7 +116,7 @@ class Game
   end
 
   def run
-    self.start
+    self.best_wishes
     until self.game_over? || self.saved?
       @board.render
       action = self.get_action
