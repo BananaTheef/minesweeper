@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Tile
   attr_accessor :pos
 
@@ -21,11 +23,22 @@ class Tile
     if self.flagged?
       " F "
     elsif self.bombed? && self.revealed?
-      " B "
+      " B ".colorize(:red)
     elsif self.revealed?
-      self.any_neighbors_bomb? ? " #{self.neighbors_bomb_count} " : " _ "
+      self.any_neighbors_bomb? ? self.bomb_count_colorized : " _ "
     else
       " * "
+    end
+  end
+
+  def bomb_count_colorized
+    case bomb_count = self.neighbors_bomb_count
+    when 1
+    " #{bomb_count} ".colorize(:blue)
+    when 2
+    " #{bomb_count} ".colorize(:green)
+    else
+    " #{bomb_count} ".colorize(:red)
     end
   end
 

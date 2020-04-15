@@ -1,3 +1,4 @@
+require 'yaml'
 require_relative 'board.rb'
 
 class Game
@@ -7,8 +8,9 @@ class Game
              m: [ 16, 40 ],
              h: [ 20, 85 ] }
 
-  def initialize(difficulty)
+  def initialize(difficulty=:e)
     @board = Board.new(LAYOUT[difficulty].first, LAYOUT[difficulty].last)
+    @saved = false
   end
 
   def valid_pos?(pos)
@@ -18,9 +20,13 @@ class Game
     true
   end
 
+  def invalid_action(action)
+    puts "Sry, '#{action}' is not a valid action."
+  end
+
   def prompt
-    puts "Choose a position to be revealed or flagged(e.g.: '1,3'):"
-    puts ">"
+    puts "Choose a position(e.g.: '1,3'):"
+    print "> "
   end
 
   def get_pos
@@ -37,7 +43,8 @@ class Game
   end
 
   def get_action
-    puts "Do you want to (r)eaveal or (f)lag the position?"
+    puts "Do you want to (r)eaveal, (f)lag or (s)ave the game?"
+    print "> "
     gets.chomp
   end
 
@@ -51,6 +58,45 @@ class Game
 
   def flag(pos)
     @board[pos].flag
+  end
+
+  def file_empty?
+    File.empty?("save.rb")
+  end
+
+  def open_saved_file(mode)
+    File.open("save.rb", mode)
+  end
+
+  def delete_saved_file
+    File.open("save.rb", "w").truncate(0)
+  end
+
+  def save
+    saved_game = self.open_saved_file("w")
+    saved_game.write(@board.to_yaml)
+    @saved = true
+  end
+
+  def saved?
+    @saved
+  end
+
+  def load
+    saved_game = self.open_saved_file("r")
+    @board = YAML::load(saved_game)
+  end
+
+  def take_action(action)
+    case action
+    when "r", "f"
+      pos = self.get_pos
+      action == "r" ? self.scout(pos) : self.flag(pos)
+    when "s"
+      self.save
+    else
+      self.invalid_action(action)
+    end
   end
 
   def start
@@ -71,21 +117,34 @@ class Game
 
   def run
     self.start
-    until self.game_over?
+    until self.game_over? || self.saved?
       @board.render
-      pos = self.get_pos
       action = self.get_action
-      action == "r" ? self.scout(pos) : self.flag(pos)
+      self.take_action(action)
     end
     @board.won? ? self.won : self.lost
     @board.reveal
+    self.delete_saved_file unless self.file_empty?
   end
 end
 
 if __FILE__ == $PROGRAM_NAME
   puts "Welcome to a game of Minesweeper."
-  puts "What difficulty do you choose: (e)asy, (m)edium or (h)ard?"
-  difficulty = gets.chomp.to_sym
-  game = Game.new(difficulty)
+
+  unless File.empty?("save.rb")
+    puts "Do you want to load a saved game?(y/n)"
+    load_game = gets.chomp
+  end
+
+  if load_game == "y"
+    game = Game.new
+    game.load
+  else
+    puts "What difficulty do you choose: (e)asy, (m)edium or (h)ard?"
+    print "> "
+    difficulty = gets.chomp.to_sym
+    game = Game.new(difficulty)
+  end
+
   game.run
 end
