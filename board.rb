@@ -16,11 +16,11 @@ class Board
 
 
   def render
-    puts "   #{(0...@grid_size).to_a.join('  ')}"
+    (0...@grid_size).each { |i| print "#{i}".rjust(4) }
+    puts
     @grid.each_with_index do |row, i|
-      puts "#{i} #{row.join('')}"
+      puts "#{i}".ljust(2) +  "#{row.join(' ')}"
     end
-    nil
   end
 
   def reveal
