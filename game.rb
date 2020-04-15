@@ -3,8 +3,12 @@ require_relative 'board.rb'
 class Game
   attr_reader :board
 
-  def initialize(n=9, bombs_count=10)
-    @board = Board.new(n, bombs_count)
+  LAYOUT = { e: [ 9, 10 ],
+             m: [ 16, 40 ],
+             h: [ 20, 85 ] }
+
+  def initialize(difficulty)
+    @board = Board.new(LAYOUT[difficulty].first, LAYOUT[difficulty].last)
   end
 
   def valid_pos?(pos)
@@ -49,6 +53,10 @@ class Game
     @board[pos].flag
   end
 
+  def start
+    puts "Enjoy the game and good luck."
+  end
+
   def won
     puts "Congratulation, you won!"
   end
@@ -62,6 +70,7 @@ class Game
   end
 
   def run
+    self.start
     until self.game_over?
       @board.render
       pos = self.get_pos
@@ -71,4 +80,12 @@ class Game
     @board.won? ? self.won : self.lost
     @board.reveal
   end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  puts "Welcome to a game of Minesweeper."
+  puts "What difficulty do you choose: (e)asy, (m)edium or (h)ard?"
+  difficulty = gets.chomp.to_sym
+  game = Game.new(difficulty)
+  game.run
 end
