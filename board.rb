@@ -15,7 +15,8 @@ class Board
   end
 
 
-  def render
+  def render(revealed=false)
+    system('clear') unless revealed
     (0...@grid_size).each { |i| print "#{i}".rjust(4) }
     puts
     @grid.each_with_index do |row, i|
@@ -27,7 +28,7 @@ class Board
     @grid.each do |row|
       row.each { |tile| tile.reveal }
     end
-    self.render
+    self.render(true)
   end
 
   def place_bombs
