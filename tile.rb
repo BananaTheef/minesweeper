@@ -34,11 +34,11 @@ class Tile
   def bomb_count_colorized
     case bomb_count = self.neighbors_bomb_count
     when 1
-    " #{bomb_count} ".colorize(:blue)
+      " #{bomb_count} ".colorize(:blue)
     when 2
-    " #{bomb_count} ".colorize(:green)
+      " #{bomb_count} ".colorize(:green)
     else
-    " #{bomb_count} ".colorize(:red)
+      " #{bomb_count} ".colorize(:red)
     end
   end
 
